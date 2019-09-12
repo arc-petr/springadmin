@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.8.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>pvi.spring</groupId>
+	<artifactId>admin</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>springadminapps</name>
+	<description>Admin applications for Spring Boot</description>
+	<packaging>pom</packaging>
+
+	<properties>
+		<java.version>1.8</java.version>
+		<spring-boot-admin.version>2.1.5</spring-boot-admin.version>
+
+		<jib-maven-plugin.version>1.4.0</jib-maven-plugin.version>
+		<gcp-project-id>arc-petr</gcp-project-id>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<http-port>8080</http-port>
+		<thrift-port>8081</thrift-port>
+		<from-image>gcr.io/distroless/java</from-image>
+		<from-image-tag>8</from-image-tag>
+		<java.version>1.8</java.version>
+		<debianMainClass>NotDefinedApplication</debianMainClass>
+		<debianJavaOpts>-XX:+ExitOnOutOfMemoryError
+			-XX:-OmitStackTjx install
+			raceInFastThrow
+		</debianJavaOpts>
+		<timestamp>${maven.build.timestamp}</timestamp>
+
+		<maven.build.timestamp.format>yyyyMMdd-HHmm</maven.build.timestamp.format>
+
+	</properties>
+
+	<modules>
+		<module>bootadmin</module>
+		<module>servicediscovery</module>
+		<module>configserver</module>
+	</modules>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>Greenwich.SR2</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>com.google.cloud.tools</groupId>
+					<artifactId>jib-maven-plugin</artifactId>
+					<version>${jib-maven-plugin.version}</version>
+					<executions>
+						<execution>
+							<phase>deploy</phase>
+							<goals>
+								<goal>build</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<from>
+							<image>${from-image}:${from-image-tag}</image>
+						</from>
+						<to>
+							<image>${env.DOCKER_REGISTRY}/${gcp-project-id}/${project.name}:${project.version}</image>
+							<credHelper>gcloud</credHelper>
+						</to>
+						<extraDirectories>
+							<paths>${project.basedir}/jib</paths>
+							<permissions>
+								<permission>
+									<file>/entrypoint.sh</file>
+									<mode>755</mode>
+								</permission>
+							</permissions>
+						</extraDirectories>
+						<container>
+							<ports>
+								<port>8081</port>
+								<port>8080</port>
+							</ports>
+							<environment>
+								<SPRING_OUTPUT_ANSI_ENABLED>ALWAYS</SPRING_OUTPUT_ANSI_ENABLED>
+								<MAIN_CLASS>${debianMainClass}</MAIN_CLASS>
+								<DEBIAN_JAVA_OPTS>${debianJavaOpts}</DEBIAN_JAVA_OPTS>
+							</environment>
+							<useCurrentTimestamp>true</useCurrentTimestamp>
+						</container>
+						<allowInsecureRegistries>true</allowInsecureRegistries>
+					</configuration>
+				</plugin>
+
+
+				<plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.1.0</version>
+					<executions>
+						<execution>
+							<id>copy-resources</id>
+							<!-- here the phase you need -->
+							<phase>compile</phase>
+							<goals>
+								<goal>copy-resources</goal>
+							</goals>
+							<configuration>
+								<outputDirectory>${project.basedir}/jib</outputDirectory>
+								<resources>
+									<resource>
+										<directory>${project.basedir}/../jib</directory>
+										<filtering>true</filtering>
+									</resource>
+								</resources>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.sonarsource.scanner.maven</groupId>
+					<artifactId>sonar-maven-plugin</artifactId>
+					<version>3.6.0.1398</version>
+				</plugin>
+				<plugin>
+					<groupId>org.jacoco</groupId>
+					<artifactId>jacoco-maven-plugin</artifactId>
+					<version>0.8.4</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+</project>
