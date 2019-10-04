@@ -1,0 +1,52 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: bootadmin
+  annotations:
+    # use the shared ingress-nginx
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+  - host: bootadmin.sbadmin.192.168.64.31.nip.io
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: bootadmin
+          servicePort: 8081
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bootadmin
+spec:
+  ports:
+  - port: 8081
+    name: http
+  type: LoadBalancer
+  selector:
+    app: bootadmin
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bootadmin
+spec:
+  selector:
+    matchLabels:
+      app: bootadmin
+  template:
+    metadata:
+      labels:
+        app: bootadmin
+    spec:
+      containers:
+      - name: bootadmin
+        image: gcr.io/fresh-catwalk-240714/springbootadmin:0.0.1-SNAPSHOT
+        ports:
+          - containerPort: 8081
+        env:
+          - name: EUREKA_URL
+            value: http://eureka.sbadmin.192.168.64.31.nip.io/eureka
+          - name: CONFIG_SERVER_URL
+            value: http://configserver.sbadmin.192.168.64.31.nip.io

@@ -12,8 +12,8 @@
 	</parent>
 	<groupId>pvi.spring</groupId>
 	<artifactId>admin</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<name>springadminapps</name>
+	<version>0.0.1-SNAPSHOT</version>
 	<description>Admin applications for Spring Boot</description>
 	<packaging>pom</packaging>
 
