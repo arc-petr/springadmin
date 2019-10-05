@@ -42,11 +42,13 @@ spec:
     spec:
       containers:
       - name: bootadmin
-        image: gcr.io/fresh-catwalk-240714/springbootadmin:0.0.1-SNAPSHOT
+        image: gcr.io/fresh-catwalk-240714/springbootadmin:0.0.6-SNAPSHOT
         ports:
           - containerPort: 8081
         env:
-          - name: EUREKA_URL
-            value: http://eureka.sbadmin.192.168.64.31.nip.io/eureka
           - name: CONFIG_SERVER_URL
-            value: http://configserver.sbadmin.192.168.64.31.nip.io
+            value: "http://configserver.sbadmin:8888"
+          - name: KUBERNETES_DISCOVERY
+            value: "true"
+          - name: SPRING_BOOT_ADMIN_CLIENT
+            value: "false"

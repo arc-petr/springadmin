@@ -13,13 +13,13 @@
 	<groupId>pvi.spring</groupId>
 	<artifactId>admin</artifactId>
 	<name>springadminapps</name>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.6-SNAPSHOT</version>
 	<description>Admin applications for Spring Boot</description>
 	<packaging>pom</packaging>
 
 	<properties>
 		<java.version>1.8</java.version>
-		<spring-boot-admin.version>2.1.5</spring-boot-admin.version>
+		<spring-boot-admin.version>2.1.6</spring-boot-admin.version>
 
 		<jib-maven-plugin.version>1.4.0</jib-maven-plugin.version>
 		<gcp-project-id>arc-petr</gcp-project-id>
@@ -42,7 +42,6 @@
 
 	<modules>
 		<module>bootadmin</module>
-		<module>servicediscovery</module>
 		<module>configserver</module>
 	</modules>
 
@@ -164,5 +163,33 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-
+	<repositories>
+		<repository>
+			<id>spring-snapshots</id>
+			<name>Spring Snapshots</name>
+			<url>https://repo.spring.io/libs-snapshot-local</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+		</repository>
+		<repository>
+			<id>spring-milestones</id>
+			<name>Spring Milestones</name>
+			<url>https://repo.spring.io/libs-milestone-local</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>spring-releases</id>
+			<name>Spring Releases</name>
+			<url>https://repo.spring.io/release</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 </project>

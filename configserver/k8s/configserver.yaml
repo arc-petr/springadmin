@@ -42,9 +42,13 @@ spec:
     spec:
       containers:
       - name: configserver
-        image: gcr.io/fresh-catwalk-240714/config-server:0.0.1-SNAPSHOT
+        image: gcr.io/fresh-catwalk-240714/config-server:0.0.5-SNAPSHOT
         ports:
           - containerPort: 8888
         env:
-          - name: EUREKA_URL
-            value: http://eureka.sbadmin.192.168.64.31.nip.io/eureka
+          - name: SPRING_BOOT_URL
+            value: ""
+          - name: KUBERNETES_DISCOVERY
+            value: "true"
+          - name: SPRING_BOOT_ADMIN_CLIENT
+            value: "false"
