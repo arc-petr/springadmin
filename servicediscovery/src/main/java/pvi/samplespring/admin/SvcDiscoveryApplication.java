@@ -8,6 +8,7 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 @EnableEurekaServer
 public class SvcDiscoveryApplication {
 
+	
 	public static void main(String[] args) {
 		SpringApplication.run(SvcDiscoveryApplication.class, args);
 	}
